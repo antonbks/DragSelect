@@ -1,9 +1,18 @@
+import * as puppeteer from 'puppeteer';
 
-import puppeteer from "puppeteer";
+declare global {
+  interface Window {
+    onDragStartCalls: object[];
+    onDragMoveCalls: object[];
+    onElementSelectCalls: object[];
+    onElementUnselectCalls: object[];
+    callbackCalls: { elements: HTMLElement[] }[];
+  }
+}
 
-const baseUrl = `file://${process.cwd()}/test`;
-let page;
-let browser;
+const baseUrl = `file://${process.cwd()}/___test___`;
+let page: puppeteer.Page;
+let browser: puppeteer.Browser;
 
 beforeAll(async () => {
   browser = await puppeteer.launch();
@@ -15,18 +24,17 @@ afterAll(() => {
 });
 
 describe('Callbacks', () => {
-
   it('should trigger callbacks with the correct elements when elements are selected', async () => {
     await page.goto(`${baseUrl}/callbacks.html`);
 
-    const mouse = page.mouse
+    const mouse = page.mouse;
     // move to the middle of the page
-    await mouse.move(0, 0)
-    await mouse.down()
+    await mouse.move(0, 0);
+    await mouse.down();
     // move 300px down and to the end of the page
     // steps are how often the mouse moves
-    await mouse.move(200, 200, {steps: 100})
-    await mouse.up()
+    await mouse.move(200, 200, { steps: 100 });
+    await mouse.up();
 
     let executesFn = await page.evaluate(() => {
       return {
@@ -35,7 +43,7 @@ describe('Callbacks', () => {
         onElementSelectCalls: window.onElementSelectCalls,
         onElementUnselectCalls: window.onElementUnselectCalls,
         callbackCalls: window.callbackCalls
-      }
+      };
     });
 
     expect(executesFn.onDragStartCalls.length).toBe(1);
@@ -45,5 +53,4 @@ describe('Callbacks', () => {
     expect(executesFn.callbackCalls.length).toBe(1);
     expect(executesFn.callbackCalls[0].elements.length).toBe(2);
   });
-
 });

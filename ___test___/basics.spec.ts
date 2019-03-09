@@ -1,8 +1,8 @@
-import puppeteer from "puppeteer";
+import * as puppeteer from 'puppeteer';
 
-const baseUrl = `file://${process.cwd()}/test`;
-let page;
-let browser;
+const baseUrl = `file://${process.cwd()}/___test___`;
+let page: puppeteer.Page;
+let browser: puppeteer.Browser;
 
 beforeAll(async () => {
   browser = await puppeteer.launch();
@@ -13,12 +13,10 @@ afterAll(() => {
   browser.close();
 });
 
-describe("Basics", () => {
-
-  test("The tool should initialize correctly", async () => {
+describe('Basics', () => {
+  test('The tool should initialize correctly', async () => {
     await page.goto(`${baseUrl}/basics.html`);
     let dragNode = await page.$('.ds-selector');
     expect(dragNode).not.toBeNull();
   });
-
 });
