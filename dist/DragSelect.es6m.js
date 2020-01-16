@@ -33,7 +33,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
  https://github.com/ThibaultJanBeyer/DragSelect
  Please give it a like, this is what makes me happy :-)
- Thanks You
+ Thank You
 
  {*} {*} STAR THIS PLUGIN ON GITHUB: {*} {*}
 
@@ -207,12 +207,15 @@ function () {
     this.moveCallback = onDragMove;
     this.callback = callback;
     this.area = this._handleArea(area);
+    this.area2 = document.getElementsByClassName('scrollable-content')[0];
     this.customStyles = customStyles;
     this.zoom = zoom; // Selector
 
     this.selector = selector || this._createSelector();
     this.selector.classList.add(this.selectorClass);
     this.start();
+    console.log("Hello world, from fork ;)");
+    console.log('area2', this.area2);
   }
   /**
    * @param {(HTMLElement|SVGElement|any)} area
@@ -383,8 +386,8 @@ function () {
     value: function start() {
       this._handleSelectables(this._initialSelectables);
 
-      this.area.addEventListener('mousedown', this._startUp);
-      this.area.addEventListener('touchstart', this._startUp, {
+      this.area2.addEventListener('mousedown', this._startUp);
+      this.area2.addEventListener('touchstart', this._startUp, {
         passive: false
       });
     }
@@ -429,8 +432,8 @@ function () {
       this.area.removeEventListener('touchstart', this._startUp, {
         passive: false
       });
-      this.area.addEventListener('mousemove', this._handleMove);
-      this.area.addEventListener('touchmove', this._handleMove, {
+      this.area2.addEventListener('mousemove', this._handleMove);
+      this.area2.addEventListener('touchmove', this._handleMove, {
         passive: false
       });
       document.addEventListener('mouseup', this._end);
@@ -525,7 +528,7 @@ function () {
 
       var scrollNew = this.getScroll(this.area); // save for later retrieval
 
-      this._newCursorPos = cursorPosNew; // if area or document is scrolled those values have to be included aswell
+      this._newCursorPos = cursorPosNew; // if area or document is scrolled those values have to be included as well
 
       var scrollAmount = {
         x: scrollNew.x - this._initialScroll.x,
@@ -550,9 +553,9 @@ function () {
        *
        * Example #1:
        * Unfortunately, things get even more complicated when we are inside a scrollable
-       * DIV. Then, let’s say we scoll to the right by 10px and move the cursor right by 5px in our
-       * checks we have to substract 10px from the initialcursor position in our check
-       * (since the inital position is moved to the left by 10px) so in our example:
+       * DIV. Then, let’s say we scroll to the right by 10px and move the cursor right by 5px in our
+       * checks we have to subtract 10px from the initialcursor position in our check
+       * (since the initial position is moved to the left by 10px) so in our example:
        * 1. cursorPosNew.x (5) > initialCursorPos.x (0) - scrollAmount.x (10) === 5 > -10 === true
        * then reset the x position to its initial position (since we might have changed that
        * position when scrolling to the left before going right) in our example:
@@ -570,7 +573,7 @@ function () {
        *
        * same thing has to be done for top/bottom
        *
-       * I hope that makes sence, try stuff out and play around with variables to get a hang of it.
+       * I hope that makes sense. Try stuff out and play around with variables to get a hang of it.
        */
 
       var selectorPos = {}; // right
@@ -869,12 +872,12 @@ function () {
       this._previousCursorPos = this._getCursorPos(event, this.area);
       document.removeEventListener('mouseup', this._end);
       document.removeEventListener('touchend', this._end);
-      this.area.removeEventListener('mousemove', this._handleMove);
-      this.area.removeEventListener('touchmove', this._handleMove, {
+      this.area2.removeEventListener('mousemove', this._handleMove);
+      this.area2.removeEventListener('touchmove', this._handleMove, {
         passive: false
       });
-      this.area.addEventListener('mousedown', this._startUp);
-      this.area.addEventListener('touchstart', this._startUp, {
+      this.area2.addEventListener('mousedown', this._startUp);
+      this.area2.addEventListener('touchstart', this._startUp, {
         passive: false
       });
       if (withCallback) this.callback(this.getSelection(), event);
@@ -921,15 +924,15 @@ function () {
       var fromSelection = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
       var withCallback = arguments.length > 2 ? arguments[2] : undefined;
       this.reset(false, withCallback);
-      this.area.removeEventListener('mousedown', this._startUp);
-      this.area.removeEventListener('touchstart', this._startUp, {
+      this.area2.removeEventListener('mousedown', this._startUp);
+      this.area2.removeEventListener('touchstart', this._startUp, {
         passive: false
       });
       document.removeEventListener('mouseup', this._end);
       document.removeEventListener('touchend', this._end);
 
       this._handleSelectables(_toConsumableArray(this.selectables), remove, fromSelection);
-    } // Usefull methods for user
+    } // Useful methods for the user
     //////////////////////////////////////////////////////////////////////////////////////
 
     /**
@@ -1278,7 +1281,7 @@ function () {
       var docScroll = this.getScroll(); // needed when document is scrollable but area is not
 
       return {
-        // if it’s constrained in an area the area should be substracted calculate
+        // if it’s constrained in an area the area should be subtracted calculate
         x: (cPos.x - areaRect.left - docScroll.x) / this.zoom,
         y: (cPos.y - areaRect.top - docScroll.y) / this.zoom
       };
