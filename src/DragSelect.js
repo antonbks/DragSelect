@@ -87,7 +87,7 @@ class DragSelect {
    */
   constructor({
     area = document,
-    autoScrollSpeed = 1,
+    autoScrollSpeed = 3,
     callback = () => {},
     customStyles = false,
     hoverClass = 'ds-hover',
@@ -122,6 +122,9 @@ class DragSelect {
     this.callback = callback;
     this.area = this._handleArea(area);
     this.area2 = document.getElementsByClassName('scrollable-content')[0]
+    setTimeout(() => {
+      this.area3 = document.getElementsByClassName('drive-tbody')[0]
+    }, 500);
     this.customStyles = customStyles;
     this.zoom = zoom;
 
@@ -130,7 +133,7 @@ class DragSelect {
     this.selector.classList.add(this.selectorClass);
     this.start();
     console.log("Hello world, from fork ;)")
-    console.log('area2', this.area2)
+    console.log('area3', this.area3)
   }
 
   /**
@@ -400,6 +403,7 @@ class DragSelect {
    * @private
    */
   handleMove(event) {
+    console.log("mousemove")
     const selectorPos = this._getPosition(event);
 
     // callback
@@ -408,12 +412,13 @@ class DragSelect {
 
     this.selector.style.display = 'block'; // hidden unless moved, fix for issue #8
 
+    // scroll area if area is scrollable
+    this._autoScroll(event);
+
     // move element on location
     this._updatePos(this.selector, selectorPos);
     this.checkIfInsideSelection(null);
 
-    // scroll area if area is scrollable
-    this._autoScroll(event);
   }
 
   /**
@@ -688,30 +693,62 @@ class DragSelect {
   // Autoscroll
   //////////////////////////////////////////////////////////////////////////////////////
 
+  // Returns a function, that, as long as it continues to be invoked, will not
+  // be triggered. The function will be called after it stops being called for
+  // N milliseconds. If `immediate` is passed, trigger the function on the
+  // leading edge, instead of the trailing.
+  debounce(func, wait, immediate) {
+    var timeout;
+    return function() {
+      var context = this, args = arguments;
+      var later = function() {
+        timeout = null;
+        if (!immediate) func.apply(context, args);
+      };
+      var callNow = immediate && !timeout;
+      clearTimeout(timeout);
+      timeout = setTimeout(later, wait);
+      if (callNow) func.apply(context, args);
+    };
+  };
+
   /**
    * Automatically Scroll the area by selecting
    * @param {Object} event – event object.
    * @private
    */
   _autoScroll(event) {
-    var edge = this.isCursorNearEdge(event, this.area);
+    var edge = this.isCursorNearEdge(event, this.area3);
 
     var docEl =
       document &&
       document.documentElement &&
       document.documentElement.scrollTop &&
       document.documentElement;
-    var _area = this.area === document ? docEl || document.body : this.area;
+    var _area = this.area3;
+    console.log(edge)
+
+    if(!edge) {
+      return
+    }
 
     if (edge === 'top' && _area.scrollTop > 0) {
       _area.scrollTop -= 1 * this.autoScrollSpeed;
     } else if (edge === 'bottom') {
+      // while (this.mouseInteraction) {
+        
       _area.scrollTop += 1 * this.autoScrollSpeed;
+        // const selectorPos = this._getPosition(event);
+        // this._updatePos(this.selector, selectorPos);
+      // }
     } else if (edge === 'left' && _area.scrollLeft > 0) {
       _area.scrollLeft -= 1 * this.autoScrollSpeed;
     } else if (edge === 'right') {
       _area.scrollLeft += 1 * this.autoScrollSpeed;
     }
+
+    
+    // myEfficientFn();
   }
 
   /**

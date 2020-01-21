@@ -111,7 +111,7 @@ function () {
     var _ref$area = _ref.area,
         area = _ref$area === void 0 ? document : _ref$area,
         _ref$autoScrollSpeed = _ref.autoScrollSpeed,
-        autoScrollSpeed = _ref$autoScrollSpeed === void 0 ? 1 : _ref$autoScrollSpeed,
+        autoScrollSpeed = _ref$autoScrollSpeed === void 0 ? 3 : _ref$autoScrollSpeed,
         _ref$callback = _ref.callback,
         callback = _ref$callback === void 0 ? function () {} : _ref$callback,
         _ref$customStyles = _ref.customStyles,
@@ -208,6 +208,9 @@ function () {
     this.callback = callback;
     this.area = this._handleArea(area);
     this.area2 = document.getElementsByClassName('scrollable-content')[0];
+    setTimeout(function () {
+      _this.area3 = document.getElementsByClassName('drive-tbody')[0];
+    }, 500);
     this.customStyles = customStyles;
     this.zoom = zoom; // Selector
 
@@ -215,7 +218,7 @@ function () {
     this.selector.classList.add(this.selectorClass);
     this.start();
     console.log("Hello world, from fork ;)");
-    console.log('area2', this.area2);
+    console.log('area3', this.area3);
   }
   /**
    * @param {(HTMLElement|SVGElement|any)} area
@@ -500,19 +503,22 @@ function () {
      * @private
      */
     value: function handleMove(event) {
+      console.log("mousemove");
+
       var selectorPos = this._getPosition(event); // callback
 
 
       this.moveCallback(event);
       if (this._breaked) return false;
       this.selector.style.display = 'block'; // hidden unless moved, fix for issue #8
-      // move element on location
+      // scroll area if area is scrollable
+
+      this._autoScroll(event); // move element on location
+
 
       this._updatePos(this.selector, selectorPos);
 
-      this.checkIfInsideSelection(null); // scroll area if area is scrollable
-
-      this._autoScroll(event);
+      this.checkIfInsideSelection(null);
     }
     /**
      * Calculates and returns the exact x,y,w,h positions of the selector element
@@ -794,30 +800,61 @@ function () {
       }
     } // Autoscroll
     //////////////////////////////////////////////////////////////////////////////////////
+    // Returns a function, that, as long as it continues to be invoked, will not
+    // be triggered. The function will be called after it stops being called for
+    // N milliseconds. If `immediate` is passed, trigger the function on the
+    // leading edge, instead of the trailing.
+
+  }, {
+    key: "debounce",
+    value: function debounce(func, wait, immediate) {
+      var timeout;
+      return function () {
+        var context = this,
+            args = arguments;
+
+        var later = function later() {
+          timeout = null;
+          if (!immediate) func.apply(context, args);
+        };
+
+        var callNow = immediate && !timeout;
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+        if (callNow) func.apply(context, args);
+      };
+    }
+  }, {
+    key: "_autoScroll",
 
     /**
      * Automatically Scroll the area by selecting
      * @param {Object} event – event object.
      * @private
      */
-
-  }, {
-    key: "_autoScroll",
     value: function _autoScroll(event) {
-      var edge = this.isCursorNearEdge(event, this.area);
+      var edge = this.isCursorNearEdge(event, this.area3);
       var docEl = document && document.documentElement && document.documentElement.scrollTop && document.documentElement;
+      var _area = this.area3;
+      console.log(edge);
 
-      var _area = this.area === document ? docEl || document.body : this.area;
+      if (!edge) {
+        return;
+      }
 
       if (edge === 'top' && _area.scrollTop > 0) {
         _area.scrollTop -= 1 * this.autoScrollSpeed;
       } else if (edge === 'bottom') {
-        _area.scrollTop += 1 * this.autoScrollSpeed;
+        // while (this.mouseInteraction) {
+        _area.scrollTop += 1 * this.autoScrollSpeed; // const selectorPos = this._getPosition(event);
+        // this._updatePos(this.selector, selectorPos);
+        // }
       } else if (edge === 'left' && _area.scrollLeft > 0) {
         _area.scrollLeft -= 1 * this.autoScrollSpeed;
       } else if (edge === 'right') {
         _area.scrollLeft += 1 * this.autoScrollSpeed;
-      }
+      } // myEfficientFn();
+
     }
     /**
      * Check if the selector is near an edge of the area
