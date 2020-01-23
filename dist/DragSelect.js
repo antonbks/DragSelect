@@ -208,9 +208,9 @@ function () {
     this.callback = callback;
     this.area = this._handleArea(area);
     this.area2 = document.getElementsByClassName('scrollable-content')[0];
-    setTimeout(function () {
-      _this.area3 = document.getElementsByClassName('drive-tbody')[0];
-    }, 500);
+    this.area3 = document.querySelector('virtual-scroller');
+    this.matrix = {};
+    this.per_row = null;
     this.customStyles = customStyles;
     this.zoom = zoom; // Selector
 
@@ -845,15 +845,13 @@ function () {
       if (edge === 'top' && _area.scrollTop > 0) {
         _area.scrollTop -= 1 * this.autoScrollSpeed;
       } else if (edge === 'bottom') {
-        // while (this.mouseInteraction) {
-        _area.scrollTop += 1 * this.autoScrollSpeed; // const selectorPos = this._getPosition(event);
-        // this._updatePos(this.selector, selectorPos);
-        // }
-      } else if (edge === 'left' && _area.scrollLeft > 0) {
-        _area.scrollLeft -= 1 * this.autoScrollSpeed;
-      } else if (edge === 'right') {
-        _area.scrollLeft += 1 * this.autoScrollSpeed;
-      } // myEfficientFn();
+        _area.scrollTop += 1 * this.autoScrollSpeed;
+      } // } else if (edge === 'left' && _area.scrollLeft > 0) {
+      //   _area.scrollLeft -= 1 * this.autoScrollSpeed;
+      // } else if (edge === 'right') {
+      //   _area.scrollLeft += 1 * this.autoScrollSpeed;
+      // }
+      // myEfficientFn();
 
     }
     /**
