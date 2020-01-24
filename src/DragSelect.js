@@ -287,8 +287,8 @@ class DragSelect {
    */
   start() {
     this._handleSelectables(this._initialSelectables);
-    this.area2.addEventListener('mousedown', this._startUp);
-    this.area2.addEventListener('touchstart', this._startUp, { passive: false });
+    this.area3.addEventListener('mousedown', this._startUp);
+    this.area3.addEventListener('touchstart', this._startUp, { passive: false });
   }
 
   /**
@@ -337,8 +337,8 @@ class DragSelect {
     this.area.removeEventListener('touchstart', this._startUp, {
       passive: false
     });
-    this.area2.addEventListener('mousemove', this._handleMove);
-    this.area2.addEventListener('touchmove', this._handleMove, {
+    this.area3.addEventListener('mousemove', this._handleMove);
+    this.area3.addEventListener('touchmove', this._handleMove, {
       passive: false
     });
     document.addEventListener('mouseup', this._end);
@@ -795,12 +795,12 @@ class DragSelect {
     this._previousCursorPos = this._getCursorPos(event, this.area);
     document.removeEventListener('mouseup', this._end);
     document.removeEventListener('touchend', this._end);
-    this.area2.removeEventListener('mousemove', this._handleMove);
-    this.area2.removeEventListener('touchmove', this._handleMove, {
+    this.area3.removeEventListener('mousemove', this._handleMove);
+    this.area3.removeEventListener('touchmove', this._handleMove, {
       passive: false
     });
-    this.area2.addEventListener('mousedown', this._startUp);
-    this.area2.addEventListener('touchstart', this._startUp, { passive: false });
+    this.area3.addEventListener('mousedown', this._startUp);
+    this.area3.addEventListener('touchstart', this._startUp, { passive: false });
 
     if (withCallback) this.callback(this.getSelection(), event);
     if (this._breaked) return false;
@@ -841,8 +841,8 @@ class DragSelect {
    */
   stop(remove = true, fromSelection = true, withCallback) {
     this.reset(false, withCallback);
-    this.area2.removeEventListener('mousedown', this._startUp);
-    this.area2.removeEventListener('touchstart', this._startUp, {
+    this.area3.removeEventListener('mousedown', this._startUp);
+    this.area3.removeEventListener('touchstart', this._startUp, {
       passive: false
     });
     document.removeEventListener('mouseup', this._end);
