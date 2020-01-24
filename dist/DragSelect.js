@@ -920,6 +920,7 @@ function () {
       this.selector.style.width = '0';
       this.selector.style.height = '0';
       this.selector.style.display = 'none';
+      this.clearSelection(false);
       setTimeout(function () {
         return (// debounce in order "onClick" to work
           _this2.mouseInteraction = false

@@ -809,6 +809,8 @@ class DragSelect {
     this.selector.style.height = '0';
     this.selector.style.display = 'none';
 
+    this.clearSelection(false);
+
     setTimeout(
       () =>
         // debounce in order "onClick" to work
