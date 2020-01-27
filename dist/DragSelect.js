@@ -412,7 +412,7 @@ function () {
       if (event.type === 'touchstart') // Call preventDefault() to prevent double click issue, see https://github.com/ThibaultJanBeyer/DragSelect/pull/29 & https://developer.mozilla.org/vi/docs/Web/API/Touch_events/Supporting_both_TouchEvent_and_MouseEvent
         event.preventDefault();
       if (this._isRightClick(event)) return;
-      if (this._isScrollbarClick(event, this.area)) return; // callback
+      if (this._isScrollbarClick(event, this.area3)) return; // callback
 
       this.onDragStartBegin(event);
       if (this._breaked) return false;
@@ -503,8 +503,6 @@ function () {
      * @private
      */
     value: function handleMove(event) {
-      console.log("mousemove");
-
       var selectorPos = this._getPosition(event); // callback
 
 
@@ -836,7 +834,6 @@ function () {
       var edge = this.isCursorNearEdge(event, this.area3);
       var docEl = document && document.documentElement && document.documentElement.scrollTop && document.documentElement;
       var _area = this.area3;
-      console.log(edge);
 
       if (!edge) {
         return;

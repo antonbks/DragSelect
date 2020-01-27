@@ -309,7 +309,7 @@ class DragSelect {
       event.preventDefault();
 
     if (this._isRightClick(event)) return;
-    if (this._isScrollbarClick(event, this.area)) return;
+    if (this._isScrollbarClick(event, this.area3)) return;
     // callback
     this.onDragStartBegin(event);
     if (this._breaked) return false;
@@ -403,7 +403,6 @@ class DragSelect {
    * @private
    */
   handleMove(event) {
-    console.log("mousemove")
     const selectorPos = this._getPosition(event);
 
     // callback
@@ -726,7 +725,6 @@ class DragSelect {
       document.documentElement.scrollTop &&
       document.documentElement;
     var _area = this.area3;
-    console.log(edge)
 
     if(!edge) {
       return
